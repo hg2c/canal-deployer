@@ -1,6 +1,6 @@
 colon := :
 $(colon) := :
-IMAGE_NAME ?= hg2c/canal-deployer$(:)v1.1.5-3
+IMAGE_NAME ?= easi/canal-deployer$(:)v1.1.5-6
 
 build:
 	docker build -t $(IMAGE_NAME) .

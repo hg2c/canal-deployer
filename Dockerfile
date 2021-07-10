@@ -1,14 +1,12 @@
 FROM canal/osbase:v1
 
-MAINTAINER Luo Tao (lotreal@gmail.com)
-
-# install canal
-COPY canal.deployer-*.tar.gz /opt/
+MAINTAINER Luo Tao (luotao@easi.com.au)
 
 RUN \
     mkdir -p /opt/canal-deployer && \
-    tar -xzvf /opt/canal.deployer-*.tar.gz -C /opt/canal-deployer && \
-    /bin/rm -f /opt/canal.deployer-*.tar.gz && \
+    wget -nv -P /opt https://github.com/alibaba/canal/releases/download/canal-1.1.5/canal.deployer-1.1.5.tar.gz && \
+    tar -xzvf /opt/canal.deployer-1.1.5.tar.gz -C /opt/canal-deployer && \
+    /bin/rm -f /opt/canal.deployer-1.1.5.tar.gz && \
 
     mkdir -p /opt/canal-deployer/logs/canal && \
     yum clean all && \
