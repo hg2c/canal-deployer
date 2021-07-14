@@ -12,14 +12,25 @@ cd $BASE
 
 canal_conf=$BASE/conf/canal.properties
 canal_local_conf=$BASE/conf/canal_local.properties
+instance_conf=conf/${CDC_INSTANCE}/instance.properties
 logback_configurationFile=$BASE/conf/logback.xml
 
-CANAL_DESTINATIONS=$(perl -le 'print $ENV{"canal.destinations"}')
-mv conf/example conf/${CANAL_DESTINATIONS:-cdc}
+CDC_INSTANCE=${CDC_INSTANCE:-cdc}
 
-sed -i "s|canal.destinations = .*|canal.destinations = ${CANAL_DESTINATIONS:-cdc}|" $canal_conf
+mv conf/example conf/${CDC_INSTANCE}
+
+sed -i "s|canal.destinations = .*|canal.destinations = ${CDC_INSTANCE}|" $canal_conf
 sed -i "s|canal.auto.scan = .*|canal.auto.scan = false|" $canal_conf
 sed -i "s|canal.instance.global.spring.xml = .*|canal.instance.global.spring.xml = classpath:spring/default-instance.xml|" $canal_conf
+
+sed -i "s|canal.instance.master.address=.*|canal.instance.master.address=${CDC_MASTER_ADDRESS}|" $instance_conf
+sed -i "s|canal.instance.master.journal.name=.*|canal.instance.master.journal.name=${CDC_MASTER_JOURNAL_NAME}|" $instance_conf
+sed -i "s|canal.instance.master.position=.*|canal.instance.master.position=${CDC_MASTER_JOURNAL_POSITION}|" $instance_conf
+sed -i "s|canal.instance.dbUsername=.*|canal.instance.dbUsername=${CDC_MASTER_USERNAME}|" $instance_conf
+sed -i "s|canal.instance.dbPassword=.*|canal.instance.dbPassword=${CDC_MASTER_PASSWORD}|" $instance_conf
+
+CDC_INSTANCE_FILTER_REGEX=$(printf '%s\n' "${CDC_INSTANCE_FILTER_REGEX}" | sed -e 's/[]\/$*.^[]/\\&/g')
+sed -i "s|canal.instance.filter.regex=.*|canal.instance.filter.regex=${CDC_INSTANCE_FILTER_REGEX}|" $instance_conf
 
 ## set java path
 if [ -z "$JAVA" ] ; then
