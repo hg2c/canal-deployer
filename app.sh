@@ -14,9 +14,11 @@ canal_local_conf=$BASE/conf/canal_local.properties
 instance_conf=$BASE/conf/${CDC_INSTANCE}/instance.properties
 logback_configurationFile=$BASE/conf/logback.xml
 
-sed -i "s|canal.destinations = .*|canal.destinations = ${CDC_INSTANCE}|" $canal_conf
-sed -i "s|canal.auto.scan = .*|canal.auto.scan = false|" $canal_conf
-sed -i "s|canal.instance.global.spring.xml = .*|canal.instance.global.spring.xml = classpath:spring/default-instance.xml|" $canal_conf
+
+sed -i "s|canal.zkServers =.*|canal.zkServers = ${CDC_ZOOKEEPER}|" $canal_conf
+sed -i "s|canal.destinations =.*|canal.destinations = ${CDC_INSTANCE}|" $canal_conf
+sed -i "s|canal.auto.scan =.*|canal.auto.scan = false|" $canal_conf
+sed -i "s|canal.instance.global.spring.xml =.*|canal.instance.global.spring.xml = classpath:spring/default-instance.xml|" $canal_conf
 
 sed -i "s|canal.instance.master.address=.*|canal.instance.master.address=${CDC_MASTER_ADDRESS}|" $instance_conf
 sed -i "s|canal.instance.master.journal.name=.*|canal.instance.master.journal.name=${CDC_MASTER_JOURNAL_NAME}|" $instance_conf

@@ -12,6 +12,7 @@ run:
 
 bash:
 	docker run -it --rm \
+		--env="CDC_ZOOKEEPER=zk-cs.zookeeper.svc:2181/canal/cdc" \
 		--env="CDC_INSTANCE=cdc" \
 		--env="CDC_MASTER_ADDRESS=prod.rds.amazonaws.com:3306" \
 		--env="CDC_MASTER_DATABASE=easi_delivery" \
