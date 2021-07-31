@@ -29,6 +29,12 @@ sed -i "s|canal.instance.dbPassword=.*|canal.instance.dbPassword=${CDC_MASTER_PA
 CDC_INSTANCE_FILTER_REGEX=$(printf '%s\n' "${CDC_INSTANCE_FILTER_REGEX}" | sed -e 's/[]\/$*.^[]/\\&/g')
 sed -i "s|canal.instance.filter.regex=.*|canal.instance.filter.regex=${CDC_INSTANCE_FILTER_REGEX}|" $instance_conf
 
+if [ -z "$CDC_INSTANCE_FILTER_BLACK" ] ; then
+    CDC_INSTANCE_FILTER_BLACK="information_schema\\\\..*,mysql\\\\..*,performance_schema\\\\..*,sys\\\\..*"
+fi
+CDC_INSTANCE_FILTER_BLACK=$(printf '%s\n' "${CDC_INSTANCE_FILTER_BLACK}" | sed -e 's/[]\/$*.^[]/\\&/g')
+sed -i "s|canal.instance.filter.black.regex=.*|canal.instance.filter.black.regex=${CDC_INSTANCE_FILTER_BLACK}|" $instance_conf
+
 echo ---
 cat $canal_conf
 echo ---
